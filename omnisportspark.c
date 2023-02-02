@@ -65,22 +65,38 @@ void* playsoccer(void* arg)
 int main(){
     sem_init(&fieldUse, 0, 1);
 
-    for(int i = 0; i < 36; i++){
+        for (int i = 0; i < 36; i++)
+    {
         pthread_create(&(baseball[i]), NULL, playbaseball, NULL);
     }
 
-        // critical section
-        sleep(4);
-
-        // signal
-        printf("\nJust Exiting...\n");
-        sem_post(&fieldUse);
-        sleep(4);
+    for (int i = 0; i < 44; i++)
+    {
+        pthread_create(&(football[i]), NULL, playfootball, NULL);
     }
-    //pthread_join(t1,NULL);
-    //pthread_join(t2,NULL);
 
-    while(1);
+    for (int i = 0; i < 44; i++)
+    {
+        pthread_create(&(soccer[i]), NULL, playsoccer, NULL);
+    }
+    // pthread_join(t1,NULL);
+    // pthread_join(t2,NULL);
+    for (int i = 0; i < 36; i++)
+    {
+        pthread_join(&(baseball[i]), NULL);
+    }
+
+    for (int i = 0; i < 44; i++)
+    {
+        pthread_join(&(football[i]), NULL);
+    }
+
+    for (int i = 0; i < 44; i++)
+    {
+        pthread_join(&(soccer[i]), NULL);
+    }
+
+    while (1);
     sem_destroy(&fieldUse);
     return 0;
 }
