@@ -20,21 +20,21 @@ pthread_mutex_t gameLock;
 
 int sport;
 
-struct baseballP {
-  int id;
-  int state;
-  pthread_t thr;
-};
-struct footballP {
-  int id;
-  int state;
-  pthread_t thr;
-};
-struct soccerP {
-  int id;
-  int state;
-  pthread_t thr;
-};
+// struct baseballP {
+//   int id;
+//   int state;
+//   pthread_t thr;
+// };
+// struct footballP {
+//   int id;
+//   int state;
+//   pthread_t thr;
+// };
+// struct soccerP {
+//   int id;
+//   int state;
+//   pthread_t thr;
+// };
 
 struct player{
     int pType;
@@ -62,25 +62,24 @@ struct player{
 //     }
 // }
 
-void* playerGo(struct player p){
+void* playerGo(void *args){
+    struct player *p = args;
     while(1){
-        if(sport == p.pType){
-            printf("[%d] I am player\n", p.id);
+        if(sport == p->pType){
+            printf("[%d] I am player\n", p->id);
             int taken = sem_trywait(&fieldUse);
 
             if(taken != 0){
-                printf("[%d] Missed lock\n", p.id);
+                printf("[%d] Missed lock\n", p->id);
                 sleep(5);
                 continue;
             }
-            printf("[%d] Took lock to play\n", p.id);
+            printf("[%d] Took lock to play\n", p->id);
             pthread_cond_wait(&startGame, &gameLock);
-            p.state = PLAYING;
-            printf("Playing baseball!!");
-
+            p->state = PLAYING;
+            printf("[%d] Playing baseball!!\n", p->id);
             sleep(10);
-
-            printf("[%d] Exiting field\n", p.id);
+            printf("[%d] Exiting field\n", p->id);
             
         }
             //Not my sport
@@ -90,7 +89,6 @@ void* playerGo(struct player p){
 
 
 int main(){
-
     int seed = getSeed("seed.txt");
 
 //struct line* array = malloc(number_of_elements * sizeof(struct line));
@@ -144,11 +142,12 @@ int main(){
         if(sport == BASEBALL){
             pthread_mutex_lock(&gameLock);
             sem_init(&fieldUse, 0, 18);
-            sem_init(&playGame, 0, 0);
+            sem_init(&playGame, 0, 1);
             sem_wait(&fieldUse);
             pthread_cond_broadcast(&startGame);
-            printf("Playing BASEBALL for %d seconds", gameTime);
+            printf("Playing BASEBALL for %d seconds\n", gameTime);
             sleep(gameTime);
+        
         }
 
     }
