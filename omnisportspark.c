@@ -43,9 +43,6 @@ struct player{
     pthread_t thr;
 };
 
-struct player bplayers[36];
-struct player fplayers[44];
-struct player splayers[44];
 
 // void* playerGo(struct player p){
 //     while(1){
@@ -96,6 +93,12 @@ int main(){
 
     int seed = getSeed("seed.txt");
 
+//struct line* array = malloc(number_of_elements * sizeof(struct line));
+    struct player* bplayers = malloc(36 * sizeof(struct player));
+    struct player* fplayers = malloc(44 * sizeof(struct player));
+    struct player* splayers = malloc(44 * sizeof(struct player));
+
+
     for (int i = 0; i < 36; i++){
         bplayers[i].pType = BASEBALL;
         bplayers[i].id = i;
@@ -143,7 +146,7 @@ int main(){
             sem_init(&fieldUse, 0, 18);
             sem_init(&playGame, 0, 0);
             sem_wait(&fieldUse);
-            pthread_cond_signal(&startGame);
+            pthread_cond_broadcast(&startGame);
             printf("Playing BASEBALL for %d seconds", gameTime);
             sleep(gameTime);
         }
