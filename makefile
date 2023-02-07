@@ -1,4 +1,4 @@
-all: mutexSports
+all: omnisportspark
 
 mutexSports: mutexSports.c
 	gcc -o mutexSports mutexSports.c -lpthread

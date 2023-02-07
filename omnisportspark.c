@@ -3,100 +3,172 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
+#include <string.h>
+
+#define BASEBALL 1
+#define FOOTBALL 2
+#define SOCCER 3
+
+const READY = 0;
+const PLAYING = 1;
+const RESTING = 2;
 
 sem_t fieldUse;//locked when field is in use
-sem_t fieldSpots[22];
-pthread_t baseball[36];
-pthread_t football[44];
-pthread_t soccer[44];
+sem_t playGame;
+pthread_cond_t startGame;
+pthread_mutex_t gameLock;
 
-void* playbaseball(void* arg)
-{
-    while(1){
-        //wait
-        sem_wait(&fieldUse);
-        printf("\nPlaying Baseball..%d\n", getpid());
-    
-        //critical section
-        sleep(4);
-        
-        //signal
-        printf("\nJust Exiting...\n");
-        sem_post(&fieldUse);
-        sleep(4);
-    }
-}
+int sport;
 
-void* playfootball(void* arg)
-{
-    while(1){
-        //wait
-        sem_wait(&fieldUse);
-        printf("\nPlaying Football..%d\n", getpid());
-    
-        //critical section
-        sleep(4);
-        
-        //signal
-        printf("\nJust Exiting...\n");
-        sem_post(&fieldUse);
-        sleep(4);
-    }
-}
+struct baseballP {
+  int id;
+  int state;
+  pthread_t thr;
+};
+struct footballP {
+  int id;
+  int state;
+  pthread_t thr;
+};
+struct soccerP {
+  int id;
+  int state;
+  pthread_t thr;
+};
 
-void* playsoccer(void* arg)
-{
-    while(1){
-        //wait
-        sem_wait(&fieldUse);
-        printf("\nPlaying Soccer..%d\n", getpid());
+struct player{
+    int pType;
+    int id;
+    int state;
+    pthread_t thr;
+};
+
+struct player bplayers[36];
+struct player fplayers[44];
+struct player splayers[44];
+
+// void* playerGo(struct player p){
+//     while(1){
+//         //wait
+//         sem_wait(&fieldUse);
+//         printf("\nPlaying game..%d\n", p.id);
     
-        //critical section
-        sleep(4);
+//         //critical section
+//         sleep(4);
         
-        //signal
-        printf("\nJust Exiting...\n");
-        sem_post(&fieldUse);
-        sleep(4);
+//         //signal
+//         printf("\nJust Exiting...\n");
+//         sem_post(&fieldUse);
+//         printf("Going to sleep: P%d\n", p.id);
+//         sleep(4);
+//         printf("PUT ME IN COACH: P%d\n", p.id);
+//     }
+// }
+
+void* playerGo(struct player p){
+    while(1){
+        if(sport == p.pType){
+            printf("[%d] I am player\n", p.id);
+            int taken = sem_trywait(&fieldUse);
+
+            if(taken != 0){
+                printf("[%d] Missed lock\n", p.id);
+                sleep(5);
+                continue;
+            }
+            printf("[%d] Took lock to play\n", p.id);
+            pthread_cond_wait(&startGame, &gameLock);
+            p.state = PLAYING;
+            printf("Playing baseball!!");
+
+            sleep(10);
+
+            printf("[%d] Exiting field\n", p.id);
+            
+        }
+            //Not my sport
+            sleep(5);
     }
 }
 
 
 int main(){
-    sem_init(&fieldUse, 0, 1);
 
-        for (int i = 0; i < 36; i++)
-    {
-        pthread_create(&(baseball[i]), NULL, playbaseball, NULL);
+    int seed = getSeed("seed.txt");
+
+    for (int i = 0; i < 36; i++){
+        bplayers[i].pType = BASEBALL;
+        bplayers[i].id = i;
+        bplayers[i].state = READY;
+        printf("Created player [%d]\n", bplayers[i].id);
+        pthread_create(&bplayers[i].thr, NULL, playerGo, &bplayers[i]);
     }
 
-    for (int i = 0; i < 44; i++)
-    {
-        pthread_create(&(football[i]), NULL, playfootball, NULL);
+    for (int i = 0; i < 44; i++){
+        fplayers[i].pType = FOOTBALL;
+        fplayers[i].id = i;
+        fplayers[i].state = READY;
+        pthread_create(&(fplayers[i].thr), NULL, playerGo, &fplayers[i]);
     }
 
-    for (int i = 0; i < 44; i++)
-    {
-        pthread_create(&(soccer[i]), NULL, playsoccer, NULL);
-    }
-    // pthread_join(t1,NULL);
-    // pthread_join(t2,NULL);
-    for (int i = 0; i < 36; i++)
-    {
-        pthread_join(&(baseball[i]), NULL);
+    for (int i = 0; i < 36; i++){
+        splayers[i].pType = SOCCER;
+        splayers[i].id = i;
+        splayers[i].state = READY;
+        pthread_create(&(splayers[i].thr), NULL, playerGo, &splayers[i]);
     }
 
-    for (int i = 0; i < 44; i++)
-    {
-        pthread_join(&(football[i]), NULL);
+    //sport = getRand(1,3);
+    sport = 1;
+
+    while (1){
+        int gameTime; //seconds
+        switch(sport){
+            case BASEBALL:
+                gameTime = getRand(3, 9);
+                break;
+            case FOOTBALL:
+                gameTime = getRand(5, 12);
+                break;
+            case SOCCER:
+                gameTime = getRand(10, 15);
+                break;
+            default:
+                printf("Error, not a sport");
+                exit(2);
+        }
+
+        if(sport == BASEBALL){
+            pthread_mutex_lock(&gameLock);
+            sem_init(&fieldUse, 0, 18);
+            sem_init(&playGame, 0, 0);
+            sem_wait(&fieldUse);
+            pthread_cond_signal(&startGame);
+            printf("Playing BASEBALL for %d seconds", gameTime);
+            sleep(gameTime);
+        }
+
     }
 
-    for (int i = 0; i < 44; i++)
-    {
-        pthread_join(&(soccer[i]), NULL);
-    }
 
-    while (1);
     sem_destroy(&fieldUse);
     return 0;
+}
+
+int getRand(int low, int high){
+    int random = (rand() % (high - low + 1)) + low;
+    return random;
+}
+
+int getSeed(const char* file_name){
+
+    FILE* file = fopen (file_name, "r");
+    int i = 0;
+
+    fscanf (file, "%d", &i);    
+
+    printf("Read seed value: %d\n\n", i);
+
+    fclose (file);
+    return i;
 }
