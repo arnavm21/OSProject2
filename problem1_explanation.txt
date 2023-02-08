@@ -1,0 +1,11 @@
+Project 2: omnisportspark
+
+Jake Leavitt
+Arnav Mishra
+
+
+Our solution avoids starvation of any specific sports team
+by storing the previous sport that was on the field and ensuring
+the next time it is available the same sport will not pick it up
+again. This guarantees at least one other sport game must be played
+before a sport can take the field again.
