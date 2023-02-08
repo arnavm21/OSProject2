@@ -1,0 +1,438 @@
+Script started on 2023-02-07 22:21:31-05:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="80" LINES="24"]
+bash: /home/jake/catkin_ws/devel/setup.bash: No such file or directory
+]0;jake@JakesX1: ~/Desktop/OpSys/Project2/OSProject2jake@JakesX1:~/Desktop/OpSys/Project2/OSProject2$ ./[K[Kmake
+gcc -o omnimegaplex omnimegaplex.c -lpthread
+[Komnimegaplex.c:13:7:[K [Kwarning: [Ktype defaults to ‘[Kint[K’ in declaration of ‘[KREADY[K’ [[K-Wimplicit-int[K]
+   13 | const [KREADY[K = 0;
+      |       [K^~~~~[K
+[Komnimegaplex.c:14:7:[K [Kwarning: [Ktype defaults to ‘[Kint[K’ in declaration of ‘[KPLAYING[K’ [[K-Wimplicit-int[K]
+   14 | const [KPLAYING[K = 1;
+      |       [K^~~~~~~[K
+[Komnimegaplex.c:15:7:[K [Kwarning: [Ktype defaults to ‘[Kint[K’ in declaration of ‘[KRESTING[K’ [[K-Wimplicit-int[K]
+   15 | const [KRESTING[K = 2;
+      |       [K^~~~~~~[K
+[Komnimegaplex.c:[K In function ‘[KplayerGo[K’:
+[Komnimegaplex.c:50:11:[K [Kwarning: [Kimplicit declaration of function ‘[KgetRand[K’ [[K-Wimplicit-function-declaration[K]
+   50 |     sleep([KgetRand[K(1, 30));
+      |           [K^~~~~~~[K
+[Komnimegaplex.c:53:13:[K [Kwarning: [Kimplicit declaration of function ‘[KgetTheField[K’ [[K-Wimplicit-function-declaration[K]
+   53 |             [KgetTheField[K();
+      |             [K^~~~~~~~~~~[K
+[Komnimegaplex.c:[K In function ‘[Kmain[K’:
+[Komnimegaplex.c:192:16:[K [Kwarning: [Kimplicit declaration of function ‘[KgetSeed[K’ [[K-Wimplicit-function-declaration[K]
+  192 |     int seed = [KgetSeed[K(FILENAME);
+      |                [K^~~~~~~[K
+[Komnimegaplex.c:214:48:[K [Kwarning: [Kpassing argument 3 of ‘[Kpthread_create[K’ from incompatible pointer type [[K-Wincompatible-pointer-types[K]
+  214 |         pthread_create(&bplayers[i].thr, NULL, [KplayerGo[K, &bplayers[i]);
+      |                                                [K^~~~~~~~[K
+      |                                                [K|[K
+      |                                                [Kvoid (*)(void *)[K
+In file included from [Komnimegaplex.c:3[K:
+[K/usr/include/pthread.h:200:15:[K [Knote: [Kexpected ‘[Kvoid * (*)(void *)[K’ but argument is of type ‘[Kvoid (*)(void *)[K’
+  200 |       [Kvoid *(*__start_routine) (void *)[K,
+      |       [K~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~[K
+[Komnimegaplex.c:221:50:[K [Kwarning: [Kpassing argument 3 of ‘[Kpthread_create[K’ from incompatible pointer type [[K-Wincompatible-pointer-types[K]
+  221 |         pthread_create(&(fplayers[i].thr), NULL, [KplayerGo[K, &fplayers[i]);
+      |                                                  [K^~~~~~~~[K
+      |                                                  [K|[K
+      |                                                  [Kvoid (*)(void *)[K
+In file included from [Komnimegaplex.c:3[K:
+[K/usr/include/pthread.h:200:15:[K [Knote: [Kexpected ‘[Kvoid * (*)(void *)[K’ but argument is of type ‘[Kvoid (*)(void *)[K’
+  200 |       [Kvoid *(*__start_routine) (void *)[K,
+      |       [K~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~[K
+[Komnimegaplex.c:228:50:[K [Kwarning: [Kpassing argument 3 of ‘[Kpthread_create[K’ from incompatible pointer type [[K-Wincompatible-pointer-types[K]
+  228 |         pthread_create(&(splayers[i].thr), NULL, [KplayerGo[K, &splayers[i]);
+      |                                                  [K^~~~~~~~[K
+      |                                                  [K|[K
+      |                                                  [Kvoid (*)(void *)[K
+In file included from [Komnimegaplex.c:3[K:
+[K/usr/include/pthread.h:200:15:[K [Knote: [Kexpected ‘[Kvoid * (*)(void *)[K’ but argument is of type ‘[Kvoid (*)(void *)[K’
+  200 |       [Kvoid *(*__start_routine) (void *)[K,
+      |       [K~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~[K
+]0;jake@JakesX1: ~/Desktop/OpSys/Project2/OSProject2jake@JakesX1:~/Desktop/OpSys/Project2/OSProject2$ ./omnimegaplex 
+Read seed value: 12345
+
+Checking field avail
+[Football 11] I want to play football!
+Checking field avail
+[Football 13] I want to play football!
+Checking field avail
+[Football 39] I want to play football!
+Checking field avail
+[Baseball 1] I want to play baseball!
+Checking field avail
+[Baseball 18] I want to play baseball!
+Checking field avail
+[Football 18] I want to play football!
+Checking field avail
+[Football 23] I want to play football!
+[Soccer 14] I want to player soccer!
+[Soccer 14] I'm going on the field in position [1]
+[Soccer 21] I want to player soccer!
+[Soccer 21] I'm going on the field in position [2]
+[Soccer 24] I want to player soccer!
+[Soccer 24] I'm going on the field in position [3]
+[Baseball 15] I want to play baseball!
+[Baseball 21] I want to play baseball!
+[Football 4] I want to play football!
+[Football 24] I want to play football!
+[Football 36] I want to play football!
+[Baseball 11] I want to play baseball!
+[Baseball 13] I want to play baseball!
+[Baseball 22] I want to play baseball!
+[Baseball 27] I want to play baseball!
+[Football 5] I want to play football!
+[Football 16] I want to play football!
+[Soccer 21] I'm finished playing!
+[Baseball 35] I want to play baseball!
+[Football 32] I want to play football!
+[Football 38] I want to play football!
+[Football 41] I want to play football!
+[Soccer 14] I'm finished playing!
+Checking field avail
+Checking field avail
+[Football 14] I want to play football!
+[Football 10] I want to play football!
+Checking field avail
+[Football 28] I want to play football!
+Checking field avail
+[Football 42] I want to play football!
+Checking field avail
+[Soccer 7] I want to player soccer!
+[Soccer 7] I'm going on the field in position [1]
+[Soccer 24] I'm finished playing!
+Checking field avail
+[Football 35] I want to play football!
+Checking field avail
+[Soccer 10] I want to player soccer!
+[Soccer 10] I'm going on the field in position [2]
+Checking field avail
+[Soccer 35] I want to player soccer!
+[Soccer 35] I'm going on the field in position [3]
+Checking field avail
+[Baseball 16] I want to play baseball!
+Checking field avail
+[Baseball 30] I want to play baseball!
+Checking field avail
+[Football 25] I want to play football!
+Checking field avail
+[Football 33] I want to play football!
+Checking field avail
+[Football 6] I want to play football!
+Checking field avail
+[Football 22] I want to play football!
+[Soccer 7] I'm finished playing!
+[Soccer 10] I'm finished playing!
+Checking field avail
+[Baseball 23] I want to play baseball!
+Checking field avail
+[Soccer 2] I want to player soccer!
+[Soccer 2] I'm going on the field in position [1]
+[Soccer 35] I'm finished playing!
+Checking field avail
+[Soccer 5] I want to player soccer!
+[Soccer 5] I'm going on the field in position [2]
+Checking field avail
+[Baseball 10] I want to play baseball!
+Checking field avail
+[Football 3] I want to play football!
+Checking field avail
+[Football 20] I want to play football!
+Checking field avail
+[Soccer 31] I want to player soccer!
+Checking field avail
+[Football 19] I want to play football!
+Checking field avail
+[Football 40] I want to play football!
+Checking field avail
+[Soccer 11] I want to player soccer!
+Checking field avail
+[Football 1] I want to play football!
+Checking field avail
+[Soccer 18] I want to player soccer!
+[Soccer 27] I want to player soccer!
+[Soccer 32] I want to player soccer!
+[Football 11] I'm going on the field in position [1] for 6 seconds
+[Football 13] I'm going on the field in position [2] for 6 seconds
+[Football 39] I'm going on the field in position [3] for 6 seconds
+[Football 18] I'm going on the field in position [4] for 6 seconds
+[Football 23] I'm going on the field in position [5] for 6 seconds
+[Football 4] I'm going on the field in position [6] for 6 seconds
+[Football 24] I'm going on the field in position [7] for 6 seconds
+[Football 36] I'm going on the field in position [8] for 6 seconds
+[Football 5] I'm going on the field in position [9] for 6 seconds
+[Football 16] I'm going on the field in position [10] for 6 seconds
+[Football 32] I'm going on the field in position [11] for 6 seconds
+[Football 38] I'm going on the field in position [12] for 6 seconds
+[Football 41] I'm going on the field in position [13] for 6 seconds
+[Football 14] I'm going on the field in position [14] for 6 seconds
+[Football 10] I'm going on the field in position [15] for 6 seconds
+[Football 28] I'm going on the field in position [16] for 6 seconds
+[Football 42] I'm going on the field in position [17] for 6 seconds
+[Football 35] I'm going on the field in position [18] for 6 seconds
+[Football 25] I'm going on the field in position [19] for 6 seconds
+[Football 33] I'm going on the field in position [20] for 6 seconds
+[Football 6] I'm going on the field in position [21] for 6 seconds
+[Football 22] I'm going on the field in position [22] for 6 seconds
+[Soccer 5] I'm finished playing!
+[Soccer 2] I'm finished playing!
+[Baseball 26] I want to play baseball!
+[Baseball 34] I want to play baseball!
+[Soccer 3] I want to player soccer!
+[Soccer 20] I want to player soccer!
+[Soccer 29] I want to player soccer!
+[Baseball 25] I want to play baseball!
+[Football 21] I want to play football!
+[Soccer 17] I want to player soccer!
+[Baseball 4] I want to play baseball!
+[Baseball 8] I want to play baseball!
+[Baseball 24] I want to play baseball!
+[Baseball 33] I want to play baseball!
+[Soccer 23] I want to player soccer!
+[Soccer 26] I want to player soccer!
+[Baseball 7] I want to play baseball!
+[Baseball 14] I want to play baseball!
+[Football 43] I want to play football!
+[Soccer 8] I want to player soccer!
+[Football 27] I want to play football!
+[Soccer 16] I want to player soccer!
+[Soccer 34] I want to player soccer!
+[Football 11] I finished playing!
+[Football 13] I finished playing!
+[Football 39] I finished playing!
+[Football 18] I finished playing!
+[Football 23] I finished playing!
+[Football 4] I finished playing!
+[Football 24] I finished playing!
+[Football 36] I finished playing!
+[Football 5] I finished playing!
+[Football 16] I finished playing!
+[Football 32] I finished playing!
+[Football 38] I finished playing!
+[Football 41] I finished playing!
+[Football 35] I finished playing!
+[Football 14] I finished playing!
+[Football 28] I finished playing!
+[Football 42] I finished playing!
+[Football 25] I finished playing!
+[Football 10] I finished playing!
+[Football 33] I finished playing!
+[Football 6] I finished playing!
+[Football 22] I finished playing!
+[Soccer 9] I want to player soccer!
+[Soccer 9] I'm going on the field in position [1]
+[Soccer 6] I want to player soccer!
+[Soccer 18] I'm going on the field in position [4]
+[Soccer 27] I'm going on the field in position [6]
+[Soccer 11] I'm going on the field in position [2]
+[Soccer 32] I'm going on the field in position [7]
+[Soccer 31] I'm going on the field in position [3]
+[Soccer 3] I'm going on the field in position [9]
+[Soccer 29] I'm going on the field in position [10]
+[Soccer 17] I'm going on the field in position [12]
+[Soccer 13] I want to player soccer!
+[Soccer 13] I'm going on the field in position [13]
+[Soccer 20] I'm going on the field in position [8]
+[Soccer 26] I'm going on the field in position [14]
+[Soccer 6] I'm going on the field in position [5]
+[Soccer 16] I'm going on the field in position [16]
+[Soccer 23] I'm going on the field in position [11]
+[Soccer 8] I'm going on the field in position [15]
+[Baseball 2] I want to play baseball!
+[Baseball 31] I want to play baseball!
+[Football 0] I want to play football!
+[Football 9] I want to play football!
+[Soccer 22] I want to player soccer!
+[Soccer 22] I'm going on the field in position [17]
+[Soccer 28] I want to player soccer!
+[Soccer 28] I'm going on the field in position [18]
+[Baseball 5] I want to play baseball!
+[Baseball 17] I want to play baseball!
+[Football 2] I want to play football!
+[Football 26] I want to play football!
+[Soccer 11] I'm finished playing!
+[Soccer 32] I'm finished playing!
+[Soccer 29] I'm finished playing!
+[Soccer 3] I'm finished playing!
+[Soccer 13] I'm finished playing!
+[Baseball 0] I want to play baseball!
+[Football 12] I want to play football!
+[Football 30] I want to play football!
+[Soccer 4] I want to player soccer!
+[Soccer 4] I'm going on the field in position [2]
+[Soccer 19] I want to player soccer!
+[Soccer 19] I'm going on the field in position [7]
+[Soccer 30] I want to player soccer!
+[Soccer 30] I'm going on the field in position [9]
+[Soccer 21] I want to player soccer!
+[Soccer 21] I'm going on the field in position [10]
+[Soccer 8] I'm finished playing!
+[Baseball 3] I want to play baseball!
+[Baseball 20] I want to play baseball!
+[Baseball 29] I want to play baseball!
+[Soccer 15] I want to player soccer!
+[Soccer 15] I'm going on the field in position [13]
+[Soccer 18] I'm finished playing!
+[Soccer 27] I'm finished playing!
+[Soccer 14] I want to player soccer!
+[Soccer 22] I'm finished playing!
+[Soccer 31] I'm finished playing!
+[Soccer 28] I'm finished playing!
+[Soccer 14] I'm going on the field in position [3]
+[Football 11] I want to play football!
+[Football 13] I want to play football!
+[Soccer 23] I'm finished playing!
+[Football 39] I want to play football!
+[Football 18] I want to play football!
+[Football 23] I want to play football!
+[Football 4] I want to play football!
+[Football 24] I want to play football!
+[Football 36] I want to play football!
+[Football 5] I want to play football!
+[Football 16] I want to play football!
+[Football 32] I want to play football!
+[Football 38] I want to play football!
+[Football 41] I want to play football!
+[Football 35] I want to play football!
+[Football 14] I want to play football!
+[Football 28] I want to play football!
+[Football 10] I want to play football!
+[Football 25] I want to play football!
+[Football 33] I want to play football!
+[Football 22] I want to play football!
+[Football 6] I want to play football!
+[Football 42] I want to play football!
+[Baseball 19] I want to play baseball!
+[Football 17] I want to play football!
+[Soccer 4] I'm finished playing!
+[Soccer 9] I'm finished playing!
+[Soccer 25] I want to player soccer!
+[Soccer 25] I'm going on the field in position [1]
+[Baseball 1] I'm going on the field in position [1] for 4 seconds
+[Baseball 18] I'm going on the field in position [2] for 4 seconds
+[Baseball 15] I'm going on the field in position [3] for 4 seconds
+[Soccer 33] I want to player soccer!
+[Soccer 33] I'm going on the field in position [2]
+[Soccer 24] I want to player soccer!
+[Baseball 21] I'm going on the field in position [4] for 4 seconds
+[Soccer 24] I'm going on the field in position [4]
+[Baseball 11] I'm going on the field in position [5] for 4 seconds
+[Baseball 13] I'm going on the field in position [6] for 4 seconds
+[Baseball 22] I'm going on the field in position [7] for 4 seconds
+[Baseball 27] I'm going on the field in position [8] for 4 seconds
+[Soccer 17] I'm finished playing!
+[Baseball 35] I'm going on the field in position [9] for 4 seconds
+[Baseball 16] I'm going on the field in position [10] for 4 seconds
+[Soccer 21] I'm finished playing!
+[Baseball 30] I'm going on the field in position [11] for 4 seconds
+[Baseball 23] I'm going on the field in position [12] for 4 seconds
+[Baseball 10] I'm going on the field in position [13] for 4 seconds
+[Baseball 26] I'm going on the field in position [14] for 4 seconds
+[Baseball 34] I'm going on the field in position [15] for 4 seconds
+[Baseball 25] I'm going on the field in position [16] for 4 seconds
+[Soccer 20] I'm finished playing!
+[Baseball 4] I'm going on the field in position [17] for 4 seconds
+[Baseball 8] I'm going on the field in position [18] for 4 seconds
+[Soccer 26] I'm finished playing!
+[Soccer 16] I'm finished playing!
+[Soccer 6] I'm finished playing!
+[Baseball 12] I want to play baseball!
+[Football 31] I want to play football!
+[Football 34] I want to play football!
+[Baseball 9] I want to play baseball!
+[Baseball 28] I want to play baseball!
+[Soccer 12] I want to player soccer!
+[Soccer 25] I'm finished playing!
+[Soccer 30] I'm finished playing!
+[Soccer 24] I'm finished playing!
+[Baseball 6] I want to play baseball!
+[Baseball 32] I want to play baseball!
+[Football 7] I want to play football!
+[Football 8] I want to play football!
+[Soccer 0] I want to player soccer!
+[Soccer 1] I want to player soccer!
+[Soccer 19] I'm finished playing!
+[Soccer 7] I want to player soccer!
+[Soccer 10] I want to player soccer!
+[Soccer 33] I'm finished playing!
+[Football 15] I want to play football!
+[Football 29] I want to play football!
+[Football 37] I want to play football!
+[Soccer 15] I'm finished playing!
+[Baseball 1] I finished playing!
+[Baseball 18] I finished playing!
+[Baseball 15] I finished playing!
+[Baseball 21] I finished playing!
+[Baseball 22] I finished playing!
+[Baseball 11] I finished playing!
+[Baseball 35] I finished playing!
+[Soccer 14] I'm finished playing!
+[Baseball 16] I finished playing!
+[Baseball 23] I finished playing!
+[Baseball 27] I finished playing!
+[Baseball 13] I finished playing!
+[Baseball 30] I finished playing!
+[Baseball 10] I finished playing!
+[Baseball 34] I finished playing!
+[Baseball 26] I finished playing!
+[Baseball 25] I finished playing!
+[Baseball 4] I finished playing!
+[Baseball 8] I finished playing!
+[Soccer 35] I want to player soccer!
+[Soccer 34] I'm going on the field in position [1]
+[Soccer 12] I'm going on the field in position [2]
+[Soccer 35] I'm going on the field in position [3]
+[Soccer 1] I'm going on the field in position [5]
+[Soccer 7] I'm going on the field in position [6]
+[Soccer 0] I'm going on the field in position [4]
+[Soccer 35] I'm finished playing!
+[Soccer 0] I'm finished playing!
+[Soccer 34] I'm finished playing!
+[Soccer 7] I'm finished playing!
+[Soccer 12] I'm finished playing!
+[Soccer 5] I want to player soccer!
+[Soccer 5] I'm going on the field in position [1]
+[Baseball 24] I'm going on the field in position [1] for 4 seconds
+[Baseball 33] I'm going on the field in position [2] for 4 seconds
+[Baseball 7] I'm going on the field in position [3] for 4 seconds
+[Soccer 2] I want to player soccer!
+[Soccer 2] I'm going on the field in position [2]
+[Baseball 14] I'm going on the field in position [4] for 4 seconds
+[Baseball 2] I'm going on the field in position [5] for 4 seconds
+[Baseball 31] I'm going on the field in position [6] for 4 seconds
+[Baseball 18] I want to play baseball!
+[Baseball 1] I want to play baseball!
+[Baseball 15] I want to play baseball!
+[Baseball 18] I'm going on the field in position [7] for 4 seconds
+[Baseball 17] I'm going on the field in position [8] for 4 seconds
+[Baseball 0] I'm going on the field in position [9] for 4 seconds
+[Baseball 21] I want to play baseball!
+[Baseball 3] I'm going on the field in position [10] for 4 seconds
+[Baseball 35] I want to play baseball!
+[Baseball 20] I'm going on the field in position [11] for 4 seconds
+[Baseball 23] I want to play baseball!
+[Baseball 11] I want to play baseball!
+[Baseball 22] I want to play baseball!
+[Baseball 16] I want to play baseball!
+[Baseball 29] I'm going on the field in position [12] for 4 seconds
+[Baseball 13] I want to play baseball!
+[Baseball 27] I want to play baseball!
+[Baseball 30] I want to play baseball!
+[Baseball 13] I'm going on the field in position [13] for 4 seconds
+[Baseball 10] I want to play baseball!
+[Baseball 10] I'm going on the field in position [14] for 4 seconds
+[Baseball 9] I'm going on the field in position [15] for 4 seconds
+[Baseball 28] I'm going on the field in position [16] for 4 seconds
+[Baseball 26] I want to play baseball!
+[Baseball 26] I'm going on the field in position [17] for 4 seconds
+[Baseball 32] I'm going on the field in position [18] for 4 seconds
+[Baseball 34] I want to play baseball!
+[Baseball 4] I want to play baseball!
+[Baseball 25] I want to play baseball!
+[Soccer 1] I'm finished playing!
+[Baseball 8] I want to play baseball!
+^C
+]0;jake@JakesX1: ~/Desktop/OpSys/Project2/OSProject2jake@JakesX1:~/Desktop/OpSys/Project2/OSProject2$ exit
+exit
+
+Script done on 2023-02-07 22:22:20-05:00 [COMMAND_EXIT_CODE="130"]
