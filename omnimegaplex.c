@@ -13,6 +13,15 @@ const READY = 0;
 const PLAYING = 1;
 const RESTING = 2;
 
+sem_t bball;
+sem_t football;
+sem_t soccer;
+sem_t fieldAvail;
+sem_t game;
+
+int pNum = 0;
+int avail = 1;
+
 struct player{
     int pType;
     int id;
