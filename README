@@ -1,1 +1,9 @@
-read
+Jacob Leavitt and Arnav Mishra
+
+Project 2: Problem 1: Omnisports park 
+
+
+Project is able to create threads of players playing different sports, using semaphores
+to allow for mutual exclusion.
+Due to scheduling, some players leave the field directly after the next game starts. 
+
