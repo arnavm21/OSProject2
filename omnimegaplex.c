@@ -8,6 +8,7 @@
 #define BASEBALL 1
 #define FOOTBALL 2
 #define SOCCER 3
+#define FILENAME "seed.txt"
 
 const READY = 0;
 const PLAYING = 1;
@@ -29,6 +30,7 @@ int footballPlaytime;
 
 int donePlaying = 0;
 int onField = 0;
+int prevGame = 10; //Not possible
 
 int socPOnField[22];
 
@@ -56,7 +58,7 @@ void playerGo(void* args){
                 numBball++;
                 sem_wait(&bball);
                 int posB = 19-playersLeft;
-                printf("[Baseball %d] I'm going on the field in position [%d]\n", p->id, posB);
+                printf("[Baseball %d] I'm going on the field in position [%d] for %d seconds\n", p->id, posB, bballPlaytime);
                 playersLeft--;
                 p->state = PLAYING;
                 if(playersLeft > 0)
@@ -80,13 +82,13 @@ void playerGo(void* args){
                 sem_wait(&football);
                 int pos = 23-playersLeft;
                 p->state = PLAYING;
-                printf("[Football %d] I'm going on the field in position [%d]\n", p->id, pos);
+                printf("[Football %d] I'm going on the field in position [%d] for %d seconds\n", p->id, pos, footballPlaytime);
                 playersLeft--;
                 if(playersLeft > 0)
                     sem_post(&football);
                 sleep(footballPlaytime);
                 sem_wait(&game);
-                donePlaying++;
+                donePlaying++; 
                 sem_post(&game);
                 printf("[Football %d] I finished playing!\n", p->id);
                 if(donePlaying == 22){
@@ -154,31 +156,31 @@ void playerGo(void* args){
 int getTheField(){
     sem_wait(&fieldAvail);
     int gameType = getRand(1,3);
-    for(int i = 0; i < 3; i++){
-        if(numBball > 17 && gameType == BASEBALL){
-            bballPlaytime-=18;
-            playersLeft = 18;
-            avail = 0;
-            sem_post(&bball);
-            return 1;
-        }
-        else if(footballPlaytime > 21 && gameType == FOOTBALL){
-            footballPlaytime-=22;
-            playersLeft = 22;
-            avail = 0;
-            sem_post(&football);
-            return 1;
-        }
-        else if(numSoccer%2 == 0 && gameType == SOCCER){
-            numSoccer-=2;
-            avail = 0;
-            onField=  2;
-            clock_gettime(CLOCK_REALTIME, &start);
-            sem_post(&soccer);
-            sem_post(&soccer);
-            return 1;
-        }
-        gameType = ++gameType % 3;
+    if(numBball > 17 && gameType == BASEBALL && gameType != prevGame){
+        numFootball-=18;
+        playersLeft = 18;
+        avail = 0;
+        sem_post(&bball);
+        prevGame = 1;
+        return 1;
+    }
+    else if(numFootball > 21 && gameType == FOOTBALL && gameType != prevGame){
+        numFootball-=22;
+        playersLeft = 22;
+        avail = 0;
+        sem_post(&football);
+        prevGame = 2;
+        return 1;
+    }
+    else if(numSoccer%2 == 0 && gameType == SOCCER && gameType != prevGame){
+        numSoccer-=2;
+        avail = 0;
+        onField=  2;
+        clock_gettime(CLOCK_REALTIME, &start);
+        sem_post(&soccer);
+        sem_post(&soccer);
+        prevGame = 3;
+        return 1;
     }
     //Not enough players
     printf("Checking field avail\n");
@@ -187,7 +189,7 @@ int getTheField(){
 }
 
 int main(){
-    int seed = getSeed("seed.txt");
+    int seed = getSeed(FILENAME);
     srand(seed);
 
     sem_init(&bball, 0, 0);
