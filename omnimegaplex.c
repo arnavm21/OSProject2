@@ -30,9 +30,9 @@ int footballPlaytime;
 int donePlaying = 0;
 int onField = 0;
 
+int socPOnField[22];
 
-
-struct timespec start;
+struct timespec start, now;
 
 struct player{
     int pType;
@@ -44,84 +44,144 @@ struct player{
 
 void playerGo(void* args){
     struct player *p = args;
+    p->state = READY;
+    sleep(getRand(1, 30));
+    while(1){
+        if(avail == 1){
+            getTheField();
+        }
+        switch(p->pType){
+            case BASEBALL:
+                printf("[Baseball %d] I want to play baseball!\n", p->id);
+                numBball++;
+                sem_wait(&bball);
+                int posB = 19-playersLeft;
+                printf("[Baseball %d] I'm going on the field in position [%d]\n", p->id, posB);
+                playersLeft--;
+                p->state = PLAYING;
+                if(playersLeft > 0)
+                    sem_post(&bball);
+                sleep(bballPlaytime);
+                sem_wait(&game);
+                donePlaying++;
+                sem_post(&game);
+                printf("[Baseball %d] I finished playing!\n", p->id);
+                if(donePlaying == 18){
+                    avail = 1;
+                    sem_post(&fieldAvail);
+                    donePlaying = 0;
+                }
+                p->state = RESTING;
+                sleep(5);
+                break;
+            case FOOTBALL:
+                printf("[Football %d] I want to play football!\n", p->id);
+                numFootball++;
+                sem_wait(&football);
+                int pos = 23-playersLeft;
+                p->state = PLAYING;
+                printf("[Football %d] I'm going on the field in position [%d]\n", p->id, pos);
+                playersLeft--;
+                if(playersLeft > 0)
+                    sem_post(&football);
+                sleep(footballPlaytime);
+                sem_wait(&game);
+                donePlaying++;
+                sem_post(&game);
+                printf("[Football %d] I finished playing!\n", p->id);
+                if(donePlaying == 22){
+                    avail = 1;
+                    sem_post(&fieldAvail);
+                    donePlaying = 0;
+                }
+                p->state = RESTING;
+                sleep(5);
+                break;
+            case SOCCER:
+                printf("[Soccer %d] I want to player soccer!\n", p->id);
+                sem_wait(&game);
+                numSoccer++;
+                sem_post(&game);
+                clock_gettime(CLOCK_REALTIME, &now);
+                int tNow = now.tv_sec - start.tv_sec;
+                if(tNow > 6 || onField >= 22){
+                    sem_wait(&soccer);
+                }
+                else{
+                    sem_wait(&game);
+                    numSoccer--;
+                    sem_post(&game);
+                }
+                int spot = -1;
+                sem_wait(&game);
+                for(int i = 0; i < 22; i++){
+                    if(socPOnField[i] == 0){
+                        spot = i + 1;
+                        socPOnField[i] = 1;
+                        break;
+                    }
+                }
+                sem_post(&game);
+                p->state = PLAYING;
+                printf("[Soccer %d] I'm going on the field in position [%d]\n", p->id, spot);
+                clock_gettime(CLOCK_REALTIME, &now);
+                tNow = now.tv_sec - start.tv_sec;
+                if(numSoccer > 1 && tNow < 7 && onField < 22){
+                    sem_wait(&game);
+                    numSoccer--;
+                    onField++;
+                    sem_post(&game);
+                    sem_post(&soccer);
 
-    sleep(1);
-
-    switch(p->pType){
-        case BASEBALL:
-            printf("[Baseball %d] I want to play baseball!\n", p->id);
-            numBball++;
-            sem_wait(&bball);
-            int pos = 19-playersLeft;
-            printf("[Baseball %d] I'm going on the field in position [%d]", p->id, pos);
-            playersLeft--;
-            if(playersLeft > 0)
-                sem_post(&bball);
-            sleep(bballPlaytime);
-            sem_wait(&game);
-            donePlaying++;
-            printf("[Baseball %d] I finished playing!");
-            if(donePlaying == 18){
-                avail = 1;
-                sem_post(&fieldAvail);
-                donePlaying = 0;
-            }
-            break;
-        case FOOTBALL:
-            printf("[Football %d] I want to play ootball!\n", p->id);
-            numFootball++;
-            sem_wait(&football);
-            int pos = 23-playersLeft;
-            printf("[Football %d] I'm going on the field in position [%d]", p->id, pos);
-            playersLeft--;
-            if(playersLeft > 0)
-                sem_post(&football);
-            sleep(footballPlaytime);
-            sem_wait(&game);
-            donePlaying++;
-            printf("[Football %d] I finished playing!");
-            if(donePlaying == 22){
-                avail = 1;
-                sem_post(&fieldAvail);
-                donePlaying = 0;
-            } 
-            break;
-        case SOCCER:
-            break;
+                }
+                sleep(getRand(2, 5));
+                sem_wait(&game);
+                printf("[Soccer %d] I'm finished playing!\n", p->id);
+                socPOnField[spot -1] = 0;
+                onField--;
+                sem_post(&game);
+                if(onField == 0){
+                    avail = 1;
+                    sem_post(&fieldAvail);
+                }
+                p->state = RESTING;
+                sleep(20);
+                break;
+        }
     }
-
-
-
-
 }
 
 int getTheField(){
     sem_wait(&fieldAvail);
     int gameType = getRand(1,3);
-    if(numBball > 17 && gameType == BASEBALL){
-        bballPlaytime-=18;
-        playersLeft = 18;
-        avail = 0;
-        sem_post(&bball);
-        return 1;
-    }
-    else if(footballPlaytime > 21 && gameType == FOOTBALL){
-        footballPlaytime-=22;
-        playersLeft = 22;
-        avail = 0;
-        sem_post(&football);
-        return 1;
-    }
-    else if(numSoccer%2 == 0 && gameType == SOCCER){
-        numSoccer-=2;
-        avail = 0;
-        onField=  2;
-        clock_gettime(CLOCK_REALTIME, &start);
-        sem_post(&soccer);
-        sem_post(&soccer);
-        return 1;
+    for(int i = 0; i < 3; i++){
+        if(numBball > 17 && gameType == BASEBALL){
+            bballPlaytime-=18;
+            playersLeft = 18;
+            avail = 0;
+            sem_post(&bball);
+            return 1;
+        }
+        else if(footballPlaytime > 21 && gameType == FOOTBALL){
+            footballPlaytime-=22;
+            playersLeft = 22;
+            avail = 0;
+            sem_post(&football);
+            return 1;
+        }
+        else if(numSoccer%2 == 0 && gameType == SOCCER){
+            numSoccer-=2;
+            avail = 0;
+            onField=  2;
+            clock_gettime(CLOCK_REALTIME, &start);
+            sem_post(&soccer);
+            sem_post(&soccer);
+            return 1;
+        }
+        gameType = ++gameType % 3;
     }
     //Not enough players
+    printf("Checking field avail\n");
     sem_post(&fieldAvail);
     return 0;
 }
@@ -133,8 +193,8 @@ int main(){
     sem_init(&bball, 0, 0);
     sem_init(&football, 0, 0);
     sem_init(&soccer, 0, 0);
-    sem_init(&fieldAvail, 0, 0);
-    sem_init(&game, 0, 0);
+    sem_init(&fieldAvail, 0, 1);
+    sem_init(&game, 0, 1);
 
     bballPlaytime = getRand(3, 9);
     footballPlaytime = getRand(5, 8);
