@@ -21,6 +21,8 @@ sem_t game;
 
 int pNum = 0;
 int avail = 1;
+int baseballLength;
+int footballLength;
 
 struct player{
     int pType;
@@ -51,8 +53,16 @@ void playerGo(void* args){
 
 int main(){
     int seed = getSeed("seed.txt");
+    srand(seed);
 
-//struct line* array = malloc(number_of_elements * sizeof(struct line));
+    sem_init(&bball, 0, 0);
+    sem_init(&football, 0, 0);
+    sem_init(&soccer, 0, 0);
+    sem_init(&fieldAvail, 0, 0);
+    sem_init(&game, 0, 0);
+
+    baseballLength = getRand(3, 9);
+
     struct player* bplayers = malloc(36 * sizeof(struct player));
     struct player* fplayers = malloc(44 * sizeof(struct player));
     struct player* splayers = malloc(44 * sizeof(struct player));
@@ -79,4 +89,24 @@ int main(){
         splayers[i].state = READY;
         pthread_create(&(splayers[i].thr), NULL, playerGo, &splayers[i]);
     }
+
+    while(1);
+}
+
+int getRand(int low, int high){
+    int random = (rand() % (high - low + 1)) + low;
+    return random;
+}
+
+int getSeed(const char* file_name){
+
+    FILE* file = fopen (file_name, "r");
+    int i = 0;
+
+    fscanf (file, "%d", &i);    
+
+    printf("Read seed value: %d\n\n", i);
+
+    fclose (file);
+    return i;
 }
